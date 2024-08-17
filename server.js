@@ -1,9 +1,30 @@
-const express = require('express')
+const express = require('express');
+const axios = require('axios')
 const app = express()
 const port = 5346
 
+const b_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZXhwIjoxNzIzODc3Nzg4LCJpYXQiOjE3MjM4Nzc0ODgsImlzcyI6IkFmZm9yZG1lZCIsImp0aSI6IjM3YmI1OGY0LTc5NjYtNGFjZC04Yjc3LTEzNTZlNGU3NmI4MSIsInN1YiI6IjIxMTFjczAxMDU3NUBtYWxsYXJlZGR5dW5pdmVyc2l0eS5hYy5pbiJ9LCJjb21wYW55TmFtZSI6Ik1hbGxhcmVkZHkgVW5pdmVyc2l0eSBIeWQiLCJjbGllbnRJRCI6IjM3YmI1OGY0LTc5NjYtNGFjZC04Yjc3LTEzNTZlNGU3NmI4MSIsImNsaWVudFNlY3JldCI6ImlRcUZLQnpRYlhGWXF6YnMiLCJvd25lck5hbWUiOiJLT1BQVUxBIFNSSUNIQVJBTiBTQUkgS1JJU0hOQSBQSEFOSSIsIm93bmVyRW1haWwiOiIyMTExY3MwMTA1NzVAbWFsbGFyZWRkeXVuaXZlcnNpdHkuYWMuaW4iLCJyb2xsTm8iOiIyMTExQ1MwMTA1NzUifQ.7HOt_8Es5_4xDt6nn0ZWXvcyUeKB9cJkZjUIyA9oVJI';
+
+
+app.get('/getItems/:comp/:cate/:top/:min/:max', async (req, res) => {
+    const {comp,cate,top,min,max} = req.params;
+  try {
+    const response = await axios.get(`http://20.244.56.144/test/companies/${comp}/categories/${cate}/products?top=${top}&minPrice=${min}&maxPrice=${max}`, {
+      headers: {
+        'Authorization': `Bearer ${b_token}`
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error Api call');
+  }
+});
+
+
+
 app.get('/', (req, res) => {
-  res.send('This is Working')
+    res.send('This is Working')
 })
 
 app.listen(port)
